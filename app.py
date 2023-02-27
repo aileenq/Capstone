@@ -5,16 +5,24 @@ from auth import AuthError, requires_auth
 from flask_cors import CORS
 
 PAGE_SIZE = 10
+
+
 def create_app(test_config=None):
 
     app = Flask(__name__)
     setup_db(app)
     CORS(app)
 
+    @app.route('/')
+    def index():
+        return "Hi, there, Please use postman to send request with authorization token"
+
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authorization,true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET,PATCH,POST,DELETE,OPTIONS')
         return response
 
     def paginate_results(requests, selection):
@@ -25,6 +33,7 @@ def create_app(test_config=None):
 
         objects_formatted = [object_name.format() for object_name in selection]
         return objects_formatted[start:end]
+
     @app.route('/actors', methods=['GET'])
     @requires_auth('get:actors')
     def get_actors(jwt):
@@ -102,7 +111,8 @@ def create_app(test_config=None):
             abort(400)
 
         # Find actor which should be deleted by id
-        actor_to_delete = Actor.query.filter(Actor.id == actor_id).one_or_none()
+        actor_to_delete = Actor.query.filter(
+            Actor.id == actor_id).one_or_none()
         if not actor_to_delete:
             abort(404)
 
@@ -162,7 +172,8 @@ def create_app(test_config=None):
         if not body:
             abort(400)
 
-        movie_to_update = Movie.query.filter(Movie.id == movie_id).one_or_none()
+        movie_to_update = Movie.query.filter(
+            Movie.id == movie_id).one_or_none()
 
         if not movie_to_update:
             abort(404)
@@ -187,7 +198,8 @@ def create_app(test_config=None):
         if not movie_id:
             abort(400)
 
-        movie_to_delete = Movie.query.filter(Movie.id == movie_id).one_or_none()
+        movie_to_delete = Movie.query.filter(
+            Movie.id == movie_id).one_or_none()
 
         if not movie_to_delete:
             abort(404)
@@ -232,6 +244,7 @@ def create_app(test_config=None):
         }), AuthError.status_code
 
     return app
+
 
 app = create_app()
 
