@@ -1,17 +1,40 @@
+# The Casting Agency Project
+***
+#### Live at: <a href="https://capstone-uwse.onrender.com">https://capstone-uwse.onrender
+***
 # Motivation for the project And Project Description 
 The Casting Agency models a company that is responsible for creating movies and managing and assigning actors to those movies. 
 You are an Executive Producer within the company and are creating a system to simplify and streamline your process.
 
-The app is using render cloud platform to deploy.
+# Main Dependencies and tech stack
 ````
-https://capstone-uwse.onrender.com
+Python 3.7+ 
+Flask 
+SQLAlchemy
+Flask-Migrate
 ````
-## Local Setup
+For a full list of required dependencies and libraries, please refer to the ````requirements.txt```` file 
+
+# Development Setup
+To start and run the local development server
+
+1. Setup Virtual Environment
+````
+python3 -m virtualenv env
+source env/bin/activate
+````
+
+2. Install Dependencies
 ````
 pip install --upgrade setuptools wheel
 pip install -r requirements.txt
-python3 -m virtualenv env
-source env/bin/activate
+````
+
+3. Run the development server
+````
+export FLASK_APP=app
+export FLASK_DEBUG=true
+python app.py
 ````
 
 ## DB setup
@@ -20,19 +43,40 @@ createuser -s udacity
 createdb agency
 ````
 
-## Server startup
-````
-export FLASK_APP=app
-export FLASK_DEBUG=true
-python app.py
-````
 ## Unit Test
 ````
 createdb testagency
 python test_app.py
 ````
 
-# API
+## Environment Variables and config setup including Auth0 and DB config
+Export the credentials as environment variable
+
+````commandline
+chmod +x setup.sh
+source setup.sh
+````
+
+# RBAC
+
+### 1- Executive_producers can:
+- view actors and movies in list and in details
+- post new actors and movies
+- patch actors and movies
+- cast actors to movies and fire actors from movies
+- delete actors and movies
+
+### 2- Casting_directors can:
+- view actors and movies in list and in details
+- post new actors and movies
+- patch actors and movies
+- cast actors to movies and fire actors from movies
+
+### 3- Casting_assistant can:
+- view actors and movies in list and details
+
+# API Endpoints
+
 ### Get actors
 
 `GET '/api/v1.0/actors'`
@@ -61,7 +105,7 @@ python test_app.py
   ],
   "success": true
 }
-}
+
 ```
 
 ### POST Actors
@@ -148,7 +192,7 @@ python test_app.py
   ],
   "success": true
 }
-}
+
 ```
 
 ### POST Movies
@@ -207,7 +251,21 @@ python test_app.py
   "deleted": 1
 }
 ```
+***
+# Deployment Instruction
+This project is deployed with Render Cloud. The cli is still in developing mode, so all
+the changes have to be made in its Web UI. The connected github repo is https://github.com/aileenq/Capstone
 
-
-
-
+Here's how:
+#### 1. Create an account at <a href="render.com">render.com</a> and log in.
+#### 2. On the Render Dashboard, click the ````New Postgres```` button to set up a Postgres cloud database.
+#### 3. Connect your app from GitHub or GitLab repo to the Web Service.
+#### 4. Go back to Render Dashboard and create a new ````Web Service````.
+   1. Provide a name for the new database service
+   2. Select an instance type: ````Free```` 
+   3. Enter the build command: ````pip install -r requirements.txt````
+   4. Connect the Postgres service
+      1. From the Postgres service (name: "postgres-deployment-example"), click the "Info" side navigation and copy the Internal Database URL from the Connections page.
+      2. From the web service (name: "render-deployment-example"), create an environment variable with the key: DATABASE_URL and value: the <Database URL> copied from the Postgres service.
+   5. Now you can hit the ````Create Web Service```` button.
+#### 5. After the Web Service is ready, you can click the App URL to start the app.

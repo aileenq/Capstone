@@ -4,11 +4,21 @@ from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
 from config import auth0_config
+import os
 
 
-AUTH0_DOMAIN = auth0_config['AUTH0_DOMAIN']
-ALGORITHMS = auth0_config['ALGORITHMS']
-API_AUDIENCE = auth0_config['API_AUDIENCE']
+if 'AUTH0_DOMAIN' in os.environ:
+    AUTH0_DOMAIN = os.environ['AUTH0_DOMAIN']
+else:
+    AUTH0_DOMAIN = auth0_config['AUTH0_DOMAIN']
+if 'ALGORITHMS' in os.environ:
+    ALGORITHMS = os.environ['ALGORITHMS']
+else:
+    ALGORITHMS = auth0_config['ALGORITHMS']
+if 'API_AUDIENCE' in os.environ['API_AUDIENCE']:
+    API_AUDIENCE = os.environ['API_AUDIENCE']
+else:
+    API_AUDIENCE = auth0_config['API_AUDIENCE']
 
 ## AuthError Exception
 '''

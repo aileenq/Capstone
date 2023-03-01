@@ -5,18 +5,36 @@ from app import create_app
 from models import setup_db, db_drop_and_create_all, Actor, Movie, Rating, db_drop_and_create_all
 from config import bearer_tokens, SQLALCHEMY_TEST_DATABASE_URI
 from datetime import date
+import os
 
+if 'CASTING_ASSISTANT' in os.environ:
+    CASTING_ASSISTANT = os.environ['CASTING_ASSISTANT']
+else:
+    CASTING_ASSISTANT = bearer_tokens['casting_assistant']
+
+if 'CASTING_DIRECTOR' in os.environ:
+    CASTING_DIRECTOR = os.environ['CASTING_DIRECTOR']
+else:
+    CASTING_DIRECTOR = bearer_tokens['casting_director']
+
+if 'EXECUTIVE_PRODUCER' in os.environ:
+    EXECUTIVE_PRODUCER = os.environ['EXECUTIVE_PRODUCER']
+else:
+    EXECUTIVE_PRODUCER = bearer_tokens['executive_producer']
+
+if 'SQLALCHEMY_TEST_DATABASE_URI' in os.environ:
+    SQLALCHEMY_TEST_DATABASE_URI = os.environ['SQLALCHEMY_TEST_DATABASE_URI']
 
 casting_assistant_auth_header = {
-    'Authorization': bearer_tokens['casting_assistant']
+    'Authorization': CASTING_ASSISTANT
 }
 
 casting_director_auth_header = {
-    'Authorization': bearer_tokens['casting_director']
+    'Authorization': CASTING_DIRECTOR
 }
 
 executive_producer_auth_header = {
-    'Authorization': bearer_tokens['executive_producer']
+    'Authorization': EXECUTIVE_PRODUCER
 }
 
 class AgencyTestCase(unittest.TestCase):
